@@ -1,0 +1,79 @@
+<h2>Clientes</h2>
+
+<a class= "btn btn-primary" href="./clientes/novo">Novo</a>
+
+
+<table class="table" id="clientes">
+    <thead>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Data de Nascimento</th>
+        <th></th>
+    </thead>
+    <tbody>
+        {{#each listaclientes}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.nome}}</td>
+            <td>{{this.endereco}}</td>
+            <td>{{this.telefone}}</td>
+            <td>{{this.datanascimento}}</td>
+            <td>
+                <a href="/clientes/alterar/{{this.id}}"
+                    class="btn btn-warning">Alterar</a>
+                
+                <button class="btn btn-danger js-delete"
+                  data-id="{{this.id}}">Excluir</button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<div class="modal" tabindex="-1" id="meumodal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Excluir Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja confirmar a exclusão desse cliente?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        <button type="button" class="btn btn-primary" id="btnsim">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="/js/jquery.js"></script>
+<script>
+  (function(){
+      //# seletor de ID 
+      //. seletor de classe
+      $('#clientes').on('click','.js-delete', function(){
+          let botaoclicado = $(this)
+          $('#btnsim').attr('data-id', botaoclicado.attr('data-id'))
+          $('#meumodal').modal('show')
+      })
+
+      $('#btnsim').on('click',function(){
+          let botaosim = $(this)
+          let codcliente = botaosim.attr('data-id')
+          $.ajax({
+              url: '/clientes/delete/' + codcliente,
+              method: 'GET',
+              success: function(){
+                  window.location.href='/clientes'
+              }
+          })
+      })
+
+  }())
+</script>
